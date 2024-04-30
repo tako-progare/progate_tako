@@ -31,3 +31,7 @@
   .custom-map-control-button:hover {
     background: rgb(235, 235, 235);
   }
+
+  .hidden {
+    display: none;
+}
