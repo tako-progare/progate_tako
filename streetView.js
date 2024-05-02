@@ -3,7 +3,7 @@ function initPano() {
   const panorama = new google.maps.StreetViewPanorama(
     document.getElementById("pano"),
     {
-      position: { lat: 37.869, lng: -122.255 },
+      position: { lat: 0, lng: 0},
       pov: {
         //カメラ中心の回転角度を、真北からの相対角度で定義します。
         heading: 270,
@@ -13,6 +13,9 @@ function initPano() {
       visible: true,
     },
   );
+  getLocation((destination) => {
+    panorama.setPosition({ lat: destination[0], lng: destination[1] });
+  });
 
   //パノラマ変更時、新しいパノラマ画像のIDをpano-cell要素内に表示する処理
   panorama.addListener("pano_changed", () => {
@@ -65,6 +68,43 @@ function initPano() {
     headingCell.firstChild.nodeValue = panorama.getPov().heading + "";
     pitchCell.firstChild.nodeValue = panorama.getPov().pitch + "";
   });
+}
+function getLocation(callback) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        console.log("緯度:", lat);
+        console.log("経度:", lng);
+        const destination = select_destination(lat, lng);
+        callback(destination);
+      },
+      () => {
+        console.error("Error: ユーザーの位置情報を取得できませんでした");
+      }
+    );
+  } else {
+    console.error("Error: ブラウザが位置情報サービスをサポートしていません");
+  }
+}
+
+
+function select_destination(lat_n = 0, lng_n = 0, D = 0.1) {
+
+  // ランダムなパラメータr,thetaを宣言
+  const r = Math.random(),
+        theta = Math.random() * (Math.PI);
+
+  // 目的地の緯度，経度を計算
+  const lat_d = D * r * Math.cos(theta) + lat_n,
+        lng_d = D * r * Math.sin(theta) + lng_n;
+        console.log(lat_d);
+
+  // 目的地の緯度，経度を配列に入れて返す
+  const destination = [lat_d, lng_d];
+  console.log(destination);
+  return destination;
 }
 
 //上の関数を割り当ててる
