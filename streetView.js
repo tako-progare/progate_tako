@@ -1,9 +1,25 @@
-function initPano() {
+import "./index.js"
+function select_destination(lat_n = 0, lng_n = 0, D = 1) {
+
+  // ランダムなパラメータr,thetaを宣言
+  const r = Math.random(),
+        theta = Math.random() * (Math.PI);
+
+  // 目的地の緯度，経度を計算
+  const lat_d = D * r * Math.sin(theta) + lat_n,
+        lng_d = D * r * Math.cos(theta) + lng_n;
+
+  // 目的地の緯度，経度を配列に入れて返す
+  const destination = [lat_d, lng_d];
+  return destination;
+}
+
+function initPano( lat, lng ) {
   //パノラマの初期化
   const panorama = new google.maps.StreetViewPanorama(
     document.getElementById("pano"),
     {
-      position: { lat: 37.869, lng: -122.255 },
+      position: { lat: lat, lng: lng },
       pov: {
         //カメラ中心の回転角度を、真北からの相対角度で定義します。
         heading: 270,
@@ -67,6 +83,14 @@ function initPano() {
   });
 }
 
+const LATITUDE = 0
+const LONGITUDE = 1
+
 //上の関数を割り当ててる
 window.initPano = initPano;
-window.addEventListener('load', initPano);
+//window.addEventListener('load', initPano);
+window.addEventListener('load', () => {
+  let destination = getLocation();
+  console.log(destination);
+  initPano(destination[LATITUDE], destination[LONGITUDE]); 
+});
