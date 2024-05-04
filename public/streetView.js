@@ -20,7 +20,7 @@ function GetGoal() {
 async function initPano() {
   try{
     const destination = await GetGoal(); // 目的地の座標を取得
-    console.log("test"+destination)
+    console.log("test", destination); // destination オブジェクトのプロパティを個々にログ出力
     //パノラマの初期化
     const panorama = new google.maps.StreetViewPanorama(
       document.getElementById("pano"),
