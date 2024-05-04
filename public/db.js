@@ -82,7 +82,7 @@ app.post("/create", function (req, res) {
     }
   });
 });
-//Expressアプリケーションをポート4000でリッスンし、起動メッセージを表示
+//Expressアプリケーションをポート3000でリッスンし、起動メッセージを表示
 app.listen(4000, () => console.log("Example app listening on port 4000!"));
 
 
