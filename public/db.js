@@ -40,13 +40,13 @@ app.get("/", function (req, res) {
 app.post('/save-location', async (req, res) => {
   try {
     // リクエストから緯度と経度を取得
-    const { latitude, longitude } = req.body;
+    const { latitude, longitude,userid } = req.body;
 
     // ここで取得した位置情報をデータベースに保存する処理を実行
     // 例えば、以下のようにPostgreSQLを使用してデータベースに挿入する処理を記述することができます
     const query = {
-      text: 'INSERT INTO locations (latitude, longitude) VALUES ($1, $2)',
-      values: [latitude, longitude],
+      text: 'INSERT INTO locations (latitude, longitude,userid) VALUES ($1, $2, $3)',
+      values: [latitude, longitude,userid],
     };
 
     await pgPool.query(query);
@@ -83,4 +83,21 @@ app.post("/create", function (req, res) {
   });
 });
 //Expressアプリケーションをポート3000でリッスンし、起動メッセージを表示
-app.listen(5000, () => console.log("Example app listening on port 5000!"));
+app.listen(4000, () => console.log("Example app listening on port 5000!"));
+
+
+app.get("/locations",(req,res) => {
+  let userid = req.query.userid
+  
+  const query = {
+      text: 'SELECT latitude,longitude,userid FROM locations WHERE userid IN ($1)',
+      values: [userid],
+  };
+  pgPool.query(query, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send(result.rows);
+    }
+  });
+})

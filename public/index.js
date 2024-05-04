@@ -1,5 +1,49 @@
 let map, infoWindow;
 
+class Timemanager {
+  constructor() {
+    this.startTime;
+    this.stoptime;
+    this.timeoutID;
+  }
+
+  // メソッド
+  // 計測開始
+  start() {
+    this.startTime = Date.now();
+    this.displaytime();
+  }
+
+  // 計測停止
+  stop() {
+    this.stopTime = Date.now();
+    clearTimeout(timeoutID);
+  }
+
+  // リセット
+  reset() {
+    time.textContent = '00:00:00';
+    this.stopTime = 0
+  }
+
+  // 経過時間を表示
+  displaytime() {
+    const time =document.getElementById('');
+
+    const currentTime = new Date(Date.now() - this.startTime);
+    const h = String(currentTime.getHours()-1).padStart(2, '0');
+    const m = String(currentTime.getMinutes()).padStart(2, '0');
+    const s = String(currentTime.getSeconds()).padStart(2, '0');
+    const ms = String(currentTime.getMilliseconds()).padStart(2, '0');
+
+    time.textContent = '${h}:${m}:${s}';
+    timeoutID = setTimeout(displaytime, 10);
+  }
+}
+
+// タイマーを作成
+const timeLimit = new Timemanager();
+
 window.onload = onLoad;
 
 function onLoad() {
@@ -21,6 +65,7 @@ function initMap() {
 }
 
 function startProcess() {
+  getDb();
   // 開始ボタンを非表示にする
   this.classList.add("hidden");
 
@@ -63,6 +108,9 @@ function startProcess() {
       handleLocationError(true, infoWindow, map.getCenter());
     }
   );
+
+  // 制限時間開始
+  timeLimit.start();
 }
 
 function endProcess() {
@@ -96,6 +144,8 @@ function endProcess() {
       handleLocationError(true, infoWindow, map.getCenter());
     }
   );
+
+  timeLimit.stop();
 }
 
 function getLocation() {
@@ -131,16 +181,40 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.open(map);
 }
 
+// ローカルストレージからユーザーIDを取得する関数
+function getUserID() {
+  // ローカルストレージからuserIDを取得
+  let userID = localStorage.getItem('userID');
+  // もしuserIDが存在しない場合、新しいUUIDを生成してローカルストレージに保存
+  if (!userID) {
+      userID = generateUUID();
+      localStorage.setItem('userID', userID);
+  }
+  return userID;
+}
+// UUIDを生成する関数
+function generateUUID() {
+  // 乱数を元にUUIDを生成
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0,
+          v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+  });
+}
 async function saveLocationToDatabase(latitude, longitude) {
   try {
-    // 位置情報を含むオブジェクトを作成
+    // ユーザーIDを取得
+    var userID = getUserID();
+    
+    // 位置情報とユーザーIDを含むオブジェクトを作成
     const locationData = {
-      latitude: latitude,
-      longitude: longitude,
+        latitude: latitude,
+        longitude: longitude,
+        userid: userID
     };
-    console.log(locationData);
+
     // POSTリクエストを送信
-    const response = await fetch('http://localhost:5000/save-location', {
+    const response = await fetch('http://localhost:4000/save-location', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -148,17 +222,22 @@ async function saveLocationToDatabase(latitude, longitude) {
       // 位置情報をJSON形式に変換して送信
       body: JSON.stringify(locationData),
     });
-
-    // レスポンスをJSON形式で解析
-    const data = await response.json();
-
-    // データベースに位置情報が保存されたかをログに出力
-    console.log('Location saved to database:', data);
   } catch (error) {
-    // エラーが発生した場合はエラーメッセージをログに出力
-    console.error('Error saving location to database:', error);
+      // エラー処理
+      console.error('Error:', error);
   }
 }
 
+function getDb(){
+  const params = {
+    userid: localStorage.getItem('userID'),
+  }
+  const query_params = new URLSearchParams(params); 
+  fetch('http://localhost:4000/locations?' + query_params)
+    .then(response => response.json())
+    .then(response => {
+      console.log(response);
+    });
+}
 
 window.initMap = initMap;
