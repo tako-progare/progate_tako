@@ -97,6 +97,7 @@ async function startProcess() {
           infoWindow.setContent("開始地点");
           infoWindow.open(map, marker);
         });
+
         if (GetGoal()){
           // 目的地の取得
         }
@@ -223,7 +224,7 @@ function GetStart() {
   const params = {
     userid: localStorage.getItem('userID'),
   }
-  const query_params = new URLSearchParams(params); 
+  const query_params = new URLSearchParams(params);
 
   return fetch('http://localhost:4000/locations?' + query_params)
     .then(response => response.json())
@@ -243,7 +244,7 @@ function GetGoal() {
   const params = {
     userid: localStorage.getItem('userID'),
   }
-  const query_params = new URLSearchParams(params); 
+  const query_params = new URLSearchParams(params);
 
   return fetch('http://localhost:4000/locations?' + query_params)
     .then(response => response.json())
@@ -409,6 +410,7 @@ function getLocation() {
     handleLocationError(false, infoWindow, map.getCenter());
   }
 }
+
 
 
 //上の関数を割り当ててる
