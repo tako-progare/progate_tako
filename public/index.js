@@ -70,12 +70,9 @@ function initMap() {
   });
 
   infoWindow = new google.maps.InfoWindow();
-  console.log(map);
 }
 
 function startProcess() {
-
-  console.log(map);
 
   getDb();
 /*
@@ -96,8 +93,6 @@ function startProcess() {
         lng: position.coords.longitude,
       };
 
-      console.log(map);
-
       // マーカーを作成して地図上に表示
       const marker = new google.maps.Marker({
         position: pos,
@@ -105,21 +100,15 @@ function startProcess() {
         title: "開始地点",
       });
 
-      console.log(map);
-
       // マーカーがクリックされたときの情報ウィンドウを設定
       marker.addListener("click", () => {
         infoWindow.setContent("開始地点");
         infoWindow.open(map, marker);
       });
 
-      console.log(map);
-
       console.log(pos.lat, pos.lng);
        // 位置情報をデータベースに保存
       saveLocationToDatabase(pos.lat, pos.lng);
-
-      console.log(map);
 
       map.setCenter(pos);
     },
