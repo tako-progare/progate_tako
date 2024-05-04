@@ -167,7 +167,7 @@ function endProcess() {
     }
   );
 
-  timeLimit.stop();
+  /*timeLimit.stop();*/
 }
 /*
 function getLocation() {
@@ -368,7 +368,6 @@ function initPano() {
       visible: true,
     },
   );
-/*
   navigator.geolocation.getCurrentPosition(
     (position) => {
         const lat = position.coords.latitude;
@@ -382,7 +381,6 @@ function initPano() {
       handleLocationError(true, infoWindow, map.getCenter());
     }
   );
-*/
   //パノラマ変更時、新しいパノラマ画像のIDをpano-cell要素内に表示する処理
   /*
   panorama.addListener("pano_changed", () => {
