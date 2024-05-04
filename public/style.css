@@ -1,13 +1,13 @@
-/* 
+/*
  * Always set the map height explicitly to define the size of the div element
- * that contains the map. 
+ * that contains the map.
  */
  #map {
     height: 100%;
   }
-  
-  /* 
-   * Optional: Makes the sample page fill the window. 
+
+  /*
+   * Optional: Makes the sample page fill the window.
    */
   html,
   body {
@@ -15,7 +15,7 @@
     margin: 0;
     padding: 0;
   }
-  
+
   .custom-map-control-button {
     background-color: #fff;
     border: 0;
@@ -67,3 +67,20 @@
   border: 0px solid #999;
 }
 
+#container {
+  background-color: #ffffff;
+  width: 540px;
+  border-radius: 1rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+#time {
+  color: #1e90ff;
+  font-size: 3rem;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0,139,253,0.25);
+  margin: .5rem;
+}
