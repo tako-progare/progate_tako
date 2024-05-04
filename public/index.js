@@ -21,6 +21,7 @@ function initMap() {
 }
 
 function startProcess() {
+  getDb();
   // 開始ボタンを非表示にする
   this.classList.add("hidden");
 
@@ -164,20 +165,30 @@ async function saveLocationToDatabase(latitude, longitude) {
     };
 
     // POSTリクエストを送信
-    const response = await fetch('http://localhost:5000/save-location', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        // 位置情報とユーザーIDをJSON形式に変換して送信
-        body: JSON.stringify(locationData),
+    const response = await fetch('http://localhost:4000/save-location', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // 位置情報をJSON形式に変換して送信
+      body: JSON.stringify(locationData),
     });
   } catch (error) {
       // エラー処理
       console.error('Error:', error);
   }
-
 }
 
+function getDb(){
+  const params = {
+    userid: localStorage.getItem('userID'),
+  }
+  const query_params = new URLSearchParams(params); 
+  fetch('http://localhost:4000/locations?' + query_params)
+    .then(response => response.json())
+    .then(response => {
+      console.log(response);
+    });
+}
 
 window.initMap = initMap;
