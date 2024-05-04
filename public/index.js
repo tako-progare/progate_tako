@@ -71,10 +71,9 @@ async function startProcess() {
     //await getDb();
 
     // 目的地の取得
-    const destination = await getGoalLocation();
+   // const destination = await GetGoal();
 
     // 目的地の緯度と経度をコンソールに出力
-    console.log("目的地の座標:", { lat: destination[0], lng: destination[1] });
 
     // ユーザーの現在の位置を取得
     navigator.geolocation.getCurrentPosition(
@@ -98,6 +97,8 @@ async function startProcess() {
           infoWindow.setContent("開始地点");
           infoWindow.open(map, marker);
         });
+        // 目的地の取得
+       const destination=select_destination(pos.lat,pos.lng);
 
         // 位置情報をデータベースに保存
         saveLocationToDatabase(pos.lat, pos.lng,destination[0],destination[1]);
@@ -107,7 +108,7 @@ async function startProcess() {
         // マップの拡大率を変更
         map.setZoom(15);
 
-        
+
         console.log("aaaaaa"+GetGoal());
       },
       () => {
@@ -220,7 +221,7 @@ function GetStart() {
   const params = {
     userid: localStorage.getItem('userID'),
   }
-  const query_params = new URLSearchParams(params); 
+  const query_params = new URLSearchParams(params);
 
   return fetch('http://localhost:4000/locations?' + query_params)
     .then(response => response.json())
@@ -240,7 +241,7 @@ function GetGoal() {
   const params = {
     userid: localStorage.getItem('userID'),
   }
-  const query_params = new URLSearchParams(params); 
+  const query_params = new URLSearchParams(params);
 
   return fetch('http://localhost:4000/locations?' + query_params)
     .then(response => response.json())
@@ -362,66 +363,6 @@ function initPano() {
   getLocation((destination) => {
     panorama.setPosition({ lat: destination[0], lng: destination[1] });
   });
-
-  //パノラマ変更時、新しいパノラマ画像のIDをpano-cell要素内に表示する処理
-  /*
-  panorama.addListener("pano_changed", () => {
-    const panoCell = document.getElementById("pano-cell");
-
-    panoCell.innerHTML = panorama.getPano();
-  });
-  */
-
-  //リンク変更時のイベントリスナー
-  /*
-  panorama.addListener("links_changed", () => {
-    const linksTable = document.getElementById("links_table");
-
-    //linksTableの中身を一旦クリアする
-    while (linksTable.hasChildNodes()) {
-      linksTable.removeChild(linksTable.lastChild);
-    }
-
-    //新しいリンクの情報を取得し、linksTableに追加する
-    const links = panorama.getLinks();
-
-    for (const i in links) {
-      const row = document.createElement("tr");
-
-      linksTable.appendChild(row);
-
-      const labelCell = document.createElement("td");
-
-      labelCell.innerHTML = "<b>Link: " + i + "</b>";
-
-      const valueCell = document.createElement("td");
-
-      valueCell.innerHTML = links[i].description;
-      linksTable.appendChild(labelCell);
-      linksTable.appendChild(valueCell);
-    }
-  });
-  */
-
-  //位置変更時、新しい位置情報をposition-cell要素内に表示する処理
-  /*
-  panorama.addListener("position_changed", () => {
-    const positionCell = document.getElementById("position-cell");
-
-    positionCell.firstChild.nodeValue = panorama.getPosition() + "";
-  });
-  */
-
-  //POV(視点)変更時、新しいPOV情報をheading-cellとpitch-cell要素内に表示する処理
-  /*
-  panorama.addListener("pov_changed", () => {
-    const headingCell = document.getElementById("heading-cell");
-    const pitchCell = document.getElementById("pitch-cell");
-
-    headingCell.firstChild.nodeValue = panorama.getPov().heading + "";
-    pitchCell.firstChild.nodeValue = panorama.getPov().pitch + "";
-  });
-  */
 }
 
 
@@ -443,6 +384,28 @@ function select_destination(lat_n = 0, lng_n = 0, D = 100) {
     return destination;
 }
 
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+
+        infoWindow.setPosition(pos);
+        infoWindow.setContent("UserPosition");
+        infoWindow.open(map);
+        map.setCenter(pos);
+      },
+      () => {
+        handleLocationError(true, infoWindow, map.getCenter());
+      }
+    );
+  } else {
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+}
 
 //上の関数を割り当ててる
 window.initPano = initPano;
