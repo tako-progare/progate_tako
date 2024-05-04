@@ -88,10 +88,11 @@ app.listen(4000, () => console.log("Example app listening on port 5000!"));
 
 app.get("/locations",(req,res) => {
   let userid = req.query.userid
+  let playUser = req.query.playUser
   
   const query = {
-      text: 'SELECT latitude,longitude,userid FROM locations WHERE userid IN ($1)',
-      values: [userid],
+      text: 'SELECT latitude,longitude,userid,play FROM locations WHERE userid = $1 AND play = $2',
+      values: [userid, playUser],
   };
   pgPool.query(query, (err, result) => {
     if (err) {
