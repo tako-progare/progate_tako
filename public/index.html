@@ -28,7 +28,7 @@
       <input class="input-range" type="range">
     </form> -->
 
-    <button class="button-main" ontouchstart="">Game Start</button>
+    <button class="button-main" id="startButton" ontouchstart="">Game Start</button>
 
 
   </main>
@@ -63,7 +63,11 @@
       See https://developers.google.com/maps/documentation/javascript/load-maps-js-api
       for more information.
     -->
-
+    <script>
+      document.getElementById('startButton').addEventListener('click', function() {
+        startProcess();
+      });
+    </script>
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1sbtY7bImjs85QQsleAGz5UmBYNdPb28&callback=initMap&v=weekly"
     defer></script>

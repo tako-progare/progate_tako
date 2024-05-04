@@ -1,5 +1,5 @@
 let map, infoWindow;
-
+/*
 class Timemanager {
   constructor() {
     this.startTime;
@@ -43,9 +43,9 @@ class Timemanager {
 
 // タイマーを作成
 const timeLimit = new Timemanager();
-
+/*
 window.onload = onLoad;
-
+/*
 function onLoad() {
   // 開始ボタン作成
   const startButton = document.createElement("button");
@@ -53,7 +53,7 @@ function onLoad() {
   startButton.classList.add("custom-map-control-button");
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(startButton);
   startButton.addEventListener("click", startProcess);
-}
+}*/
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -66,9 +66,7 @@ function initMap() {
 
 function startProcess() {
   getDb();
-  // 開始ボタンを非表示にする
-  this.classList.add("hidden");
-
+/*
   // 終了ボタン作成
   const endButton = document.createElement("button");
   endButton.textContent = "終了処理";
@@ -76,7 +74,7 @@ function startProcess() {
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(endButton);
 
   // 終了ボタンがクリックされたときの処理を設定
-  endButton.addEventListener("click", endProcess);
+  endButton.addEventListener("click", endProcess);*/
 
   // ユーザーの現在の位置を取得
   navigator.geolocation.getCurrentPosition(
@@ -108,9 +106,9 @@ function startProcess() {
       handleLocationError(true, infoWindow, map.getCenter());
     }
   );
-
+/*
   // 制限時間開始
-  timeLimit.start();
+  timeLimit.start();*/
 }
 
 function endProcess() {
