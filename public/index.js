@@ -1,3 +1,10 @@
+import { getLocation } from '/js/getLocation.js';
+import { select_destination } from '/js/select_destination.js';
+import { endProcess } from '/js/EndProcess.js';
+import { startProcess } from '/js/startProcess.js';
+import { saveLocationToDatabase } from '/js/SaveLocation.js';
+import { GetGoal } from '/js/GetGoal.js';
+import { GetStart } from '/js/GetStart.js';
 let map, infoWindow;
 
 let destinationRange = 100;
@@ -65,33 +72,15 @@ function onLoad() {
   startProcess();
 }
 
-async function startProcess() {
-  try {
-    //すでにuuidがあるか確認
-    //await getDb();
 
-    // 目的地の取得
-   // const destination = await GetGoal();
 
-    // 目的地の緯度と経度をコンソールに出力
 
-    // ユーザーの現在の位置を取得
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
 
-        console.log("現在地："+ pos);
 
-        // マーカーを作成して地図上に表示
-        const marker = new google.maps.Marker({
-          position: pos,
-          map: map,
-          title: "開始地点",
-        });
 
+<<<<<<< HEAD
+
+=======
         // マーカーがクリックされたときの情報ウィンドウを設定
         marker.addListener("click", () => {
           infoWindow.setContent("開始地点");
@@ -259,11 +248,12 @@ function GetGoal() {
       console.error('Error fetching location from database:', error);
     });
 }
+>>>>>>> 13d2e660914af5c2c31dee468f863bf4a7900351
 
 
 //game start button 押された時
 function clickGameStart(){
-  startProcess();
+  GetStart();
  //window.location.href="./streetview.html";
 }
 
@@ -370,46 +360,8 @@ function initPano() {
   });
 }
 
-function select_destination(lat_n = 0, lng_n = 0, D = 100) {
-    let geod = geodesic.Geodesic.WGS84, r;
 
-    // ランダムなパラメータd,thetaを宣言
-    const theta = Math.random() * 360,
-          d = Math.random();
 
-    // 目的地の緯度，経度を計算
-    r = geod.Direct(lat_n, lng_n, theta, D*d);
-    console.log("The Destination is (" + r.lat2.toFixed(8) + "," + r.lon2.toFixed(8) + ").")
-    console.log(typeof r.lat2.toFixed(8));
-    console.log(typeof r.lon2.toFixed(8));
-
-    // 目的地の緯度，経度を配列に入れて返す
-    const destination = [r.lat2, r.lon2];
-    return destination;
-}
-
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-
-        infoWindow.setPosition(pos);
-        infoWindow.setContent("UserPosition");
-        infoWindow.open(map);
-        map.setCenter(pos);
-      },
-      () => {
-        handleLocationError(true, infoWindow, map.getCenter());
-      }
-    );
-  } else {
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
-}
 
 
 
