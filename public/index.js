@@ -248,12 +248,8 @@ async function saveLocationToDatabase(latitude, longitude) {
 }
 
 function getDb(){
-  let playUser = localStorage.getItem('playUser');
-  const userid = response[0].userID; // 配列の0番目の要素から緯度を取得
-  const play = response[0].play; // 配列の0番目の要素から経度を取得
   const params = {
     userid: localStorage.getItem('userID'),
-    play: localStorage.getItem('play')
   }
   const query_params = new URLSearchParams(params);
   fetch('http://localhost:4000/locations?' + query_params)
@@ -261,8 +257,6 @@ function getDb(){
     .then(response => {
       console.log(response);
     });
-  
-  return { userID, play }; // 緯度と経度の情報のみを返す
 }
 
 window.initMap = initMap;

@@ -90,7 +90,7 @@ app.get("/locations",(req,res) => {
   let userid = req.query.userid
 
   const query = {
-      text: 'SELECT latitude,longitude,userid,play FROM locations WHERE userid IN ($1)',
+      text: 'SELECT latitude,longitude,userid FROM locations WHERE userid IN ($1)',
       values: [userid, playUser],
   };
   pgPool.query(query, (err, result) => {
