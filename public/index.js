@@ -10,7 +10,37 @@ function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 35.68224057589321, lng: 139.76728396076678 },
     zoom: 15,
+    zoomControl: false,
+    mapTypeControl: false,
+    streetViewControl: false,
   });
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      };
+
+      // マーカーを作成して地図上に表示
+      const marker = new google.maps.Marker({
+        position: pos,
+        map: map,
+        title: "終了地点",
+      });
+
+      // マーカーがクリックされたときの情報ウィンドウを設定
+      marker.addListener("click", () => {
+        infoWindow.setContent("終了地点");
+        infoWindow.open(map, marker);
+      });
+
+      map.setCenter(pos);
+    },
+    () => {
+      handleLocationError(true, infoWindow, map.getCenter());
+    }
+  );
 }
 
 // タイマーを作成
@@ -32,8 +62,6 @@ function onLoad() {
   startButton.addEventListener("click", startProcess);
 
   infoWindow = new google.maps.InfoWindow();
-
-  startProcess();
 
   console.log("map create");
 }
@@ -141,7 +169,7 @@ function endProcess() {
 
   timeLimit.stop();
 }
-
+/*
 function getLocation() {
   console.log("getLocation Start");
   if (navigator.geolocation) {
@@ -165,7 +193,7 @@ function getLocation() {
     handleLocationError(false, infoWindow, map.getCenter());
   }
 }
-
+*/
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setPosition(pos);
   infoWindow.setContent(
@@ -340,11 +368,21 @@ function initPano() {
       visible: true,
     },
   );
+/*
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
 
-  getLocation((destination) => {
-    panorama.setPosition({ lat: destination[0], lng: destination[1] });
-  });
+      const destination = selectdestination(lat, lng);
 
+      panorama.setPosition({ lat: destination[0], lng: destination[1]});
+    },
+    () => {
+      handleLocationError(true, infoWindow, map.getCenter());
+    }
+  );
+*/
   //パノラマ変更時、新しいパノラマ画像のIDをpano-cell要素内に表示する処理
   /*
   panorama.addListener("pano_changed", () => {
@@ -405,7 +443,8 @@ function initPano() {
   });
   */
 }
-function getLocation(callback) {
+
+function getLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -413,8 +452,6 @@ function getLocation(callback) {
         const lng = position.coords.longitude;
         console.log("緯度:", lat);
         console.log("経度:", lng);
-        const destination = select_destination(lat, lng);
-        callback(destination);
       },
       () => {
         console.error("Error: ユーザーの位置情報を取得できませんでした");
@@ -428,6 +465,7 @@ function getLocation(callback) {
 
 function select_destination(lat_n = 0, lng_n = 0, D = 100) {
     let geod = geodesic.Geodesic.WGS84, r;
+    destinationRange = D;
 
     // ランダムなパラメータd,thetaを宣言
     const theta = Math.random() * 360,
