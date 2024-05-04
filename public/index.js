@@ -65,15 +65,6 @@ function onLoad() {
 
 
 
-  infoWindow = new google.maps.InfoWindow();
-
-  startProcess();
-
-  console.log("map create");
-
-
-
-
 function startProcess() {
 
   getDb();
