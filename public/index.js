@@ -1,5 +1,49 @@
 let map, infoWindow;
 
+class Timemanager {
+  constructor() {
+    this.startTime;
+    this.stoptime;
+    this.timeoutID;
+  }
+
+  // メソッド
+  // 計測開始
+  start() {
+    this.startTime = Date.now();
+    this.displaytime();
+  }
+
+  // 計測停止
+  stop() {
+    this.stopTime = Date.now();
+    clearTimeout(timeoutID);
+  }
+
+  // リセット
+  reset() {
+    time.textContent = '00:00:00';
+    this.stopTime = 0
+  }
+
+  // 経過時間を表示
+  displaytime() {
+    const time =document.getElementById('');
+
+    const currentTime = new Date(Date.now() - this.startTime);
+    const h = String(currentTime.getHours()-1).padStart(2, '0');
+    const m = String(currentTime.getMinutes()).padStart(2, '0');
+    const s = String(currentTime.getSeconds()).padStart(2, '0');
+    const ms = String(currentTime.getMilliseconds()).padStart(2, '0');
+
+    time.textContent = '${h}:${m}:${s}';
+    timeoutID = setTimeout(displaytime, 10);
+  }
+}
+
+// タイマーを作成
+const timeLimit = new Timemanager();
+
 window.onload = onLoad;
 
 function onLoad() {
@@ -64,6 +108,9 @@ function startProcess() {
       handleLocationError(true, infoWindow, map.getCenter());
     }
   );
+
+  // 制限時間開始
+  timeLimit.start();
 }
 
 function endProcess() {
@@ -97,6 +144,8 @@ function endProcess() {
       handleLocationError(true, infoWindow, map.getCenter());
     }
   );
+
+  timeLimit.stop();
 }
 
 function getLocation() {
