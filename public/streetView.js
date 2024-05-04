@@ -13,18 +13,22 @@ function initPano() {
       visible: true,
     },
   );
+
   getLocation((destination) => {
     panorama.setPosition({ lat: destination[0], lng: destination[1] });
   });
 
   //パノラマ変更時、新しいパノラマ画像のIDをpano-cell要素内に表示する処理
+  /*
   panorama.addListener("pano_changed", () => {
     const panoCell = document.getElementById("pano-cell");
 
     panoCell.innerHTML = panorama.getPano();
   });
+  */
 
   //リンク変更時のイベントリスナー
+  /*
   panorama.addListener("links_changed", () => {
     const linksTable = document.getElementById("links_table");
 
@@ -52,15 +56,19 @@ function initPano() {
       linksTable.appendChild(valueCell);
     }
   });
+  */
 
   //位置変更時、新しい位置情報をposition-cell要素内に表示する処理
+  /*
   panorama.addListener("position_changed", () => {
     const positionCell = document.getElementById("position-cell");
 
     positionCell.firstChild.nodeValue = panorama.getPosition() + "";
   });
+  */
 
   //POV(視点)変更時、新しいPOV情報をheading-cellとpitch-cell要素内に表示する処理
+  /*
   panorama.addListener("pov_changed", () => {
     const headingCell = document.getElementById("heading-cell");
     const pitchCell = document.getElementById("pitch-cell");
@@ -68,6 +76,7 @@ function initPano() {
     headingCell.firstChild.nodeValue = panorama.getPov().heading + "";
     pitchCell.firstChild.nodeValue = panorama.getPov().pitch + "";
   });
+  */
 }
 function getLocation(callback) {
   if (navigator.geolocation) {
