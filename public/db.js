@@ -45,7 +45,7 @@ app.post('/save-location', async (req, res) => {
     // ここで取得した位置情報をデータベースに保存する処理を実行
     // 例えば、以下のようにPostgreSQLを使用してデータベースに挿入する処理を記述することができます
     const query = {
-      text: 'INSERT INTO locations (latitude, longitude,userid,play,get_goal,lon_goal) VALUES ($1, $2, $3, $4, $5, $6)',
+      text: 'INSERT INTO locations (latitude, longitude,userid,play,lat_goal,lon_goal) VALUES ($1, $2, $3, $4, $5, $6)',
       values: [latitude, longitude,userid,play,lat_goal,lon_goal],
     };
 
