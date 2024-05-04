@@ -40,7 +40,7 @@ function onLoad() {
 
 function startProcess() {
 
-  getDb();
+  getUserPosition();
 /*
   // 終了ボタン作成
   const endButton = document.createElement("button");
@@ -223,7 +223,7 @@ async function saveLocationToDatabase(latitude, longitude) {
   }
 }
 
-function getDb() {
+function getUserPosition() {
   const params = {
     userid: localStorage.getItem('userID'),
   }
