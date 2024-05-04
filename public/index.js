@@ -35,7 +35,8 @@ function onLoad() {
 
 async function startProcess() {
   try {
-    await getDb();
+    //すでにuuidがあるか確認
+    //await getDb();
 
     // 目的地の取得
     const destination = await getGoalLocation();
@@ -73,6 +74,9 @@ async function startProcess() {
         map.setCenter(pos);
         // マップの拡大率を変更
         map.setZoom(15);
+
+        
+        console.log("aaaaaa"+GetGoal());
       },
       () => {
         handleLocationError(true, infoWindow, map.getCenter());
@@ -116,30 +120,6 @@ function endProcess() {
   );
 
   timeLimit.stop();
-}
-
-function getLocation() {
-  console.log("getLocation Start");
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-
-        infoWindow.setPosition(pos);
-        infoWindow.setContent("UserPosition");
-        infoWindow.open(map);
-        map.setCenter(pos);
-      },
-      () => {
-        handleLocationError(true, infoWindow, map.getCenter());
-      }
-    );
-  } else {
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -203,15 +183,44 @@ async function saveLocationToDatabase(latitude, longitude,lat_goal,lon_goal) {
   }
 }
 
-function getDb() {
+//スタート地点の座標
+function GetStart() {
   const params = {
     userid: localStorage.getItem('userID'),
   }
-  const query_params = new URLSearchParams(params);
-  fetch('http://localhost:4000/locations?' + query_params)
+  const query_params = new URLSearchParams(params); 
+
+  return fetch('http://localhost:4000/locations?' + query_params)
     .then(response => response.json())
     .then(response => {
-      console.log(response);
+      // サーバーから取得した位置情報のうち、緯度と経度のみを取得
+      const latitude = response[0].latitude; // 配列の0番目の要素から緯度を取得
+      const longitude = response[0].longitude; // 配列の0番目の要素から経度を取得
+
+      return { latitude, longitude }; // 緯度と経度の情報のみを返す
+    })
+    .catch(error => {
+      console.error('Error fetching location from database:', error);
+    });
+}
+//ゴール地点の座標
+function GetGoal() {
+  const params = {
+    userid: localStorage.getItem('userID'),
+  }
+  const query_params = new URLSearchParams(params); 
+
+  return fetch('http://localhost:4000/locations?' + query_params)
+    .then(response => response.json())
+    .then(response => {
+      // サーバーから取得した位置情報のうち、緯度と経度のみを取得
+      const latitude = response[0].lat_goal; // 配列の0番目の要素から緯度を取得
+      const longitude = response[0].lon_goal; // 配列の0番目の要素から経度を取得
+
+      return { latitude, longitude }; // 緯度と経度の情報のみを返す
+    })
+    .catch(error => {
+      console.error('Error fetching location from database:', error);
     });
 }
 
@@ -385,26 +394,6 @@ function initPano() {
   });
   */
 }
-function getGoalLocation() {
-  return new Promise((resolve, reject) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          const destination = select_destination(lat, lng);
-          resolve(destination);
-        },
-        () => {
-          reject("Error: ユーザーの位置情報を取得できませんでした");
-        }
-      );
-    } else {
-      reject("Error: ブラウザが位置情報サービスをサポートしていません");
-    }
-  });
-}
-
 
 
 function select_destination(lat_n = 0, lng_n = 0, D = 100) {
@@ -425,25 +414,6 @@ function select_destination(lat_n = 0, lng_n = 0, D = 100) {
     return destination;
 }
 
-function getgoallocation(callback) {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        console.log("緯度:", lat);
-        console.log("経度:", lng);
-        const destination = select_destination(lat, lng);
-        callback(destination);
-      },
-      () => {
-        console.error("Error: ユーザーの位置情報を取得できませんでした");
-      }
-    );
-  } else {
-    console.error("Error: ブラウザが位置情報サービスをサポートしていません");
-  }
-}
 
 //上の関数を割り当ててる
 window.initPano = initPano;

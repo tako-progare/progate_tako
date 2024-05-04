@@ -118,3 +118,19 @@ app.get("/status",(req,res) => {
     }
   });
 })
+
+app.get("/goal_location",(req,res) => {
+  let userid = req.query.userid
+
+  const query = {
+      text: 'SELECT lat_goal, lon_goal FROM locations WHERE userid = $1 ORDER BY created_at DESC LIMIT 1',
+      values: [userid],
+  };
+  pgPool.query(query, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send(result.rows);
+    }
+  });
+})
