@@ -159,9 +159,7 @@ main {
 }
 
 #pano {
-  width: 50%;
-  height: 100%;
-  float: left;
+  height: 500px;
 }
 
 #floating-panel {

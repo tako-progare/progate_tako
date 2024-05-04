@@ -1,5 +1,6 @@
 let map, infoWindow;
 
+
 //initMap 呼び出し
 //mapを作成する
 window.initMap = initMap;
@@ -8,7 +9,35 @@ function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 35.68224057589321, lng: 139.76728396076678 },
     zoom: 15,
-  });
+    time.textContent = '${h}:${m}:${s}';
+    time.textContent = '${h}:${m}:${s}';
+    timeoutID = setTimeout(displaytime, 10);
+  }
+}
+
+// タイマーを作成
+const timeLimit = new Timemanager();
+*/
+
+
+window.onload = onLoad;
+
+function onLoad() {
+  /*
+  // 開始ボタン作成
+  const startButton = document.createElement("button");
+  startButton.textContent = "開始処理";
+  startButton.classList.add("custom-map-control-button");
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(startButton);
+  startButton.addEventListener("click", startProcess);
+  */
+
+  const startButton = document.getElementById("startButton");
+  startButton.addEventListener("click", startProcess);
+}
+
+
+
 
   infoWindow = new google.maps.InfoWindow();
 
@@ -18,6 +47,15 @@ function initMap() {
 }
 
 function startProcess() {
+
+  getDb();
+/*
+  // 終了ボタン作成
+  const endButton = document.createElement("button");
+  endButton.textContent = "終了処理";
+  endButton.classList.add("custom-map-control-button");
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(endButton);
+
 
   // getDb();
 
@@ -56,8 +94,11 @@ function startProcess() {
         infoWindow.setContent("開始地点");
         infoWindow.open(map, marker);
       });
+
       console.log(pos.lat, pos.lng);
-      // 位置情報をデータベースに保存
+
+       // 位置情報をデータベースに保存
+
       saveLocationToDatabase(pos.lat, pos.lng);
 
       map.setCenter(pos);

@@ -82,13 +82,13 @@ app.post("/create", function (req, res) {
     }
   });
 });
-//Expressアプリケーションをポート3000でリッスンし、起動メッセージを表示
-app.listen(4000, () => console.log("Example app listening on port 5000!"));
+//Expressアプリケーションをポート4000でリッスンし、起動メッセージを表示
+app.listen(4000, () => console.log("Example app listening on port 4000!"));
 
 
 app.get("/locations",(req,res) => {
   let userid = req.query.userid
-  
+
   const query = {
       text: 'SELECT latitude,longitude,userid FROM locations WHERE userid IN ($1)',
       values: [userid],
