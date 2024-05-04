@@ -55,8 +55,8 @@ if (window.addEventListener) {
 }
 
 function onLoad() {
-  const startButton = document.getElementById("startButton");
-  startButton.addEventListener("click", startProcess());
+  //const startButton = document.getElementById("startButton");
+  //startButton.addEventListener("click", startProcess());
 
   infoWindow = new google.maps.InfoWindow();
 
@@ -97,8 +97,11 @@ async function startProcess() {
           infoWindow.setContent("開始地点");
           infoWindow.open(map, marker);
         });
-        // 目的地の取得
-       const destination=select_destination(pos.lat,pos.lng);
+
+        if (GetGoal()){
+          // 目的地の取得
+        }
+        const destination=select_destination(pos.lat,pos.lng);
 
         // 位置情報をデータベースに保存
         saveLocationToDatabase(pos.lat, pos.lng,destination[0],destination[1]);
@@ -108,8 +111,8 @@ async function startProcess() {
         // マップの拡大率を変更
         map.setZoom(15);
 
-
-        console.log("aaaaaa"+GetGoal());
+        
+        console.log("aaaaaa",GetGoal());
       },
       () => {
         handleLocationError(true, infoWindow, map.getCenter());
@@ -257,9 +260,11 @@ function GetGoal() {
     });
 }
 
+
 //game start button 押された時
 function clickGameStart(){
-  window.location.href="./streetview.html";
+  startProcess();
+ //window.location.href="./streetview.html";
 }
 
 //yes button 押された時
@@ -365,7 +370,6 @@ function initPano() {
   });
 }
 
-
 function select_destination(lat_n = 0, lng_n = 0, D = 100) {
     let geod = geodesic.Geodesic.WGS84, r;
 
@@ -406,6 +410,8 @@ function getLocation() {
     handleLocationError(false, infoWindow, map.getCenter());
   }
 }
+
+
 
 //上の関数を割り当ててる
 window.initPano = initPano;
