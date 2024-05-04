@@ -62,16 +62,6 @@ function onLoad() {
   startButton.addEventListener("click", startProcess);
 }
 
-
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 35.3929, lng: 139.4428 },
-    zoom: 5,
-  });
-
-  infoWindow = new google.maps.InfoWindow();
-}
-
 function startProcess() {
 
   getDb();
