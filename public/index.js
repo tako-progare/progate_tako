@@ -46,12 +46,17 @@ function initMap() {
 // タイマーを作成
 //const timeLimit = new Timemanager();
 
-window.onload = onLoad;
+//window.onload = onLoad;
+if (window.addEventListener) {
+  window.addEventListener('load', onLoad);
+} else {
+  // もし `addEventListener` がサポートされていない場合、古いブラウザの場合に適切に動作するように代替処理を行う
+  window.attachEvent('onload', onLoad);
+}
 
 function onLoad() {
-
   const startButton = document.getElementById("startButton");
-  startButton.addEventListener("click", startProcess);
+  startButton.addEventListener("click", startProcess());
 
   infoWindow = new google.maps.InfoWindow();
 
@@ -60,51 +65,58 @@ function onLoad() {
   startProcess();
 }
 
-function startProcess() {
+async function startProcess() {
+  try {
+    //すでにuuidがあるか確認
+    //await getDb();
 
-  getDb();
+    // 目的地の取得
+    const destination = await getGoalLocation();
 
-  // ユーザーの現在の位置を取得
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
+    // 目的地の緯度と経度をコンソールに出力
+    console.log("目的地の座標:", { lat: destination[0], lng: destination[1] });
 
-      console.log("現在地:" + pos.lat + "," + pos.lng);
+    // ユーザーの現在の位置を取得
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
 
-      // マーカーを作成して地図上に表示
-      const marker = new google.maps.Marker({
-        position: pos,
-        map: map,
-        title: "開始地点",
-      });
+        console.log("現在地："+ pos);
 
-      // マーカーがクリックされたときの情報ウィンドウを設定
-      marker.addListener("click", () => {
-        infoWindow.setContent("開始地点");
-        infoWindow.open(map, marker);
-      });
+        // マーカーを作成して地図上に表示
+        const marker = new google.maps.Marker({
+          position: pos,
+          map: map,
+          title: "開始地点",
+        });
 
-      console.log(pos.lat, pos.lng);
+        // マーカーがクリックされたときの情報ウィンドウを設定
+        marker.addListener("click", () => {
+          infoWindow.setContent("開始地点");
+          infoWindow.open(map, marker);
+        });
 
-       // 位置情報をデータベースに保存
+        // 位置情報をデータベースに保存
+        saveLocationToDatabase(pos.lat, pos.lng,destination[0],destination[1]);
 
-      saveLocationToDatabase(pos.lat, pos.lng);
+        // マップの中心を現在地に
+        map.setCenter(pos);
+        // マップの拡大率を変更
+        map.setZoom(15);
 
-      // マップの中心を現在地に
-      map.setCenter(pos);
-      //まマップの拡大率を変更
-      map.setZoom(15);
-    },
-    () => {
-      handleLocationError(true, infoWindow, map.getCenter());
-    }
-  );
-  /*
-    // 制限時間開始
-    timeLimit.start();*/
+        
+        console.log("aaaaaa"+GetGoal());
+      },
+      () => {
+        handleLocationError(true, infoWindow, map.getCenter());
+      }
+    );
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function endProcess() {
@@ -172,7 +184,7 @@ function generateUUID() {
     return v.toString(16);
   });
 }
-async function saveLocationToDatabase(latitude, longitude) {
+async function saveLocationToDatabase(latitude, longitude,lat_goal,lon_goal) {
   try {
     // ユーザーIDを取得
     var userID = getUserID();
@@ -181,9 +193,13 @@ async function saveLocationToDatabase(latitude, longitude) {
     const locationData = {
       latitude: latitude,
       longitude: longitude,
-      userid: userID
+      userid: userID,
+      play:"true",
+      lat_goal:lat_goal,
+      lon_goal:lon_goal
     };
 
+    console.log(locationData);
     // POSTリクエストを送信
     const response = await fetch('http://localhost:4000/save-location', {
       method: 'POST',
@@ -199,15 +215,44 @@ async function saveLocationToDatabase(latitude, longitude) {
   }
 }
 
-function getDb() {
+//スタート地点の座標
+function GetStart() {
   const params = {
     userid: localStorage.getItem('userID'),
   }
-  const query_params = new URLSearchParams(params);
-  fetch('http://localhost:4000/locations?' + query_params)
+  const query_params = new URLSearchParams(params); 
+
+  return fetch('http://localhost:4000/locations?' + query_params)
     .then(response => response.json())
     .then(response => {
-      console.log(response);
+      // サーバーから取得した位置情報のうち、緯度と経度のみを取得
+      const latitude = response[0].latitude; // 配列の0番目の要素から緯度を取得
+      const longitude = response[0].longitude; // 配列の0番目の要素から経度を取得
+
+      return { latitude, longitude }; // 緯度と経度の情報のみを返す
+    })
+    .catch(error => {
+      console.error('Error fetching location from database:', error);
+    });
+}
+//ゴール地点の座標
+function GetGoal() {
+  const params = {
+    userid: localStorage.getItem('userID'),
+  }
+  const query_params = new URLSearchParams(params); 
+
+  return fetch('http://localhost:4000/locations?' + query_params)
+    .then(response => response.json())
+    .then(response => {
+      // サーバーから取得した位置情報のうち、緯度と経度のみを取得
+      const latitude = response[0].lat_goal; // 配列の0番目の要素から緯度を取得
+      const longitude = response[0].lon_goal; // 配列の0番目の要素から経度を取得
+
+      return { latitude, longitude }; // 緯度と経度の情報のみを返す
+    })
+    .catch(error => {
+      console.error('Error fetching location from database:', error);
     });
 }
 
@@ -287,4 +332,118 @@ class Timemanager {
 
 // タイマーを作成
 const timeLimit = new Timemanager();
-*/
+window.onload = onLoad;
+/*
+function onLoad() {
+  // 開始ボタン作成
+  const startButton = document.createElement("button");
+  startButton.textContent = "開始処理";
+  startButton.classList.add("custom-map-control-button");
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(startButton);
+  startButton.addEventListener("click", startProcess);
+}*/
+
+function initPano() {
+  //パノラマの初期化
+  const panorama = new google.maps.StreetViewPanorama(
+    document.getElementById("pano"),
+    {
+      position: { lat: 0, lng: 0},
+      pov: {
+        //カメラ中心の回転角度を、真北からの相対角度で定義します。
+        heading: 270,
+        //カメラの初期デフォルト ピッチからの「上」または「下」向きの角度を定義します
+        pitch: 0,
+      },
+      visible: true,
+    },
+  );
+
+  getLocation((destination) => {
+    panorama.setPosition({ lat: destination[0], lng: destination[1] });
+  });
+
+  //パノラマ変更時、新しいパノラマ画像のIDをpano-cell要素内に表示する処理
+  /*
+  panorama.addListener("pano_changed", () => {
+    const panoCell = document.getElementById("pano-cell");
+
+    panoCell.innerHTML = panorama.getPano();
+  });
+  */
+
+  //リンク変更時のイベントリスナー
+  /*
+  panorama.addListener("links_changed", () => {
+    const linksTable = document.getElementById("links_table");
+
+    //linksTableの中身を一旦クリアする
+    while (linksTable.hasChildNodes()) {
+      linksTable.removeChild(linksTable.lastChild);
+    }
+
+    //新しいリンクの情報を取得し、linksTableに追加する
+    const links = panorama.getLinks();
+
+    for (const i in links) {
+      const row = document.createElement("tr");
+
+      linksTable.appendChild(row);
+
+      const labelCell = document.createElement("td");
+
+      labelCell.innerHTML = "<b>Link: " + i + "</b>";
+
+      const valueCell = document.createElement("td");
+
+      valueCell.innerHTML = links[i].description;
+      linksTable.appendChild(labelCell);
+      linksTable.appendChild(valueCell);
+    }
+  });
+  */
+
+  //位置変更時、新しい位置情報をposition-cell要素内に表示する処理
+  /*
+  panorama.addListener("position_changed", () => {
+    const positionCell = document.getElementById("position-cell");
+
+    positionCell.firstChild.nodeValue = panorama.getPosition() + "";
+  });
+  */
+
+  //POV(視点)変更時、新しいPOV情報をheading-cellとpitch-cell要素内に表示する処理
+  /*
+  panorama.addListener("pov_changed", () => {
+    const headingCell = document.getElementById("heading-cell");
+    const pitchCell = document.getElementById("pitch-cell");
+
+    headingCell.firstChild.nodeValue = panorama.getPov().heading + "";
+    pitchCell.firstChild.nodeValue = panorama.getPov().pitch + "";
+  });
+  */
+}
+
+
+function select_destination(lat_n = 0, lng_n = 0, D = 100) {
+    let geod = geodesic.Geodesic.WGS84, r;
+
+    // ランダムなパラメータd,thetaを宣言
+    const theta = Math.random() * 360,
+          d = Math.random();
+
+    // 目的地の緯度，経度を計算
+    r = geod.Direct(lat_n, lng_n, theta, D*d);
+    console.log("The Destination is (" + r.lat2.toFixed(8) + "," + r.lon2.toFixed(8) + ").")
+    console.log(typeof r.lat2.toFixed(8));
+    console.log(typeof r.lon2.toFixed(8));
+
+    // 目的地の緯度，経度を配列に入れて返す
+    const destination = [r.lat2, r.lon2];
+    return destination;
+}
+
+
+//上の関数を割り当ててる
+window.initPano = initPano;
+window.addEventListener('load', initPano);
