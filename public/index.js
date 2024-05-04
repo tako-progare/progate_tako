@@ -10,7 +10,37 @@ function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 35.68224057589321, lng: 139.76728396076678 },
     zoom: 15,
+    zoomControl: false,
+    mapTypeControl: false,
+    streetViewControl: false,
   });
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      };
+
+      // マーカーを作成して地図上に表示
+      const marker = new google.maps.Marker({
+        position: pos,
+        map: map,
+        title: "終了地点",
+      });
+
+      // マーカーがクリックされたときの情報ウィンドウを設定
+      marker.addListener("click", () => {
+        infoWindow.setContent("終了地点");
+        infoWindow.open(map, marker);
+      });
+
+      map.setCenter(pos);
+    },
+    () => {
+      handleLocationError(true, infoWindow, map.getCenter());
+    }
+  );
 }
 
 // タイマーを作成
@@ -31,6 +61,8 @@ function onLoad() {
   infoWindow = new google.maps.InfoWindow();
 
   console.log("map create");
+
+  startProcess();
 }
 
 async function startProcess() {
@@ -122,7 +154,7 @@ function endProcess() {
     }
   );
 
-  timeLimit.stop();
+  /*timeLimit.stop();*/
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -261,8 +293,6 @@ function calc_score(lat_start, lng_start, lat_goal, lng_goal){
   return [r.s12, score];
 }
 
-
-
 /*
 class Timemanager {
   constructor() {
@@ -307,7 +337,6 @@ class Timemanager {
 
 // タイマーを作成
 const timeLimit = new Timemanager();
-/*
 window.onload = onLoad;
 /*
 function onLoad() {
