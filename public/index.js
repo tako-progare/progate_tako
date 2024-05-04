@@ -60,7 +60,6 @@ function onLoad() {
 
   const startButton = document.getElementById("startButton");
   startButton.addEventListener("click", startProcess);
-  initMap;
 }
 
 
