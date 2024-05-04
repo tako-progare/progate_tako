@@ -66,7 +66,10 @@ function onLoad() {
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 35.3929, lng: 139.4428 },
-    zoom: 10,
+    zoom: 5,
+    zoomControl: false,
+    mapTypeControl: false,
+    streetViewControl: false,
   });
 
   infoWindow = new google.maps.InfoWindow();
@@ -110,7 +113,10 @@ function startProcess() {
        // 位置情報をデータベースに保存
       saveLocationToDatabase(pos.lat, pos.lng);
 
+      // マップの中心を現在地に
       map.setCenter(pos);
+      //まマップの拡大率を変更
+      map.setZoom(15);
     },
     () => {
       handleLocationError(true, infoWindow, map.getCenter());
