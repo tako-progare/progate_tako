@@ -1,4 +1,4 @@
-function select_destination(lat_n = 0, lng_n = 0, D = 1) {
+function select_destination(lat_n = 0, lng_n = 0, D = 100) {
     let geod = geodesic.Geodesic.WGS84, r;
 
     // ランダムなパラメータd,thetaを宣言
