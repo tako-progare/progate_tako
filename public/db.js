@@ -91,6 +91,23 @@ app.get("/locations",(req,res) => {
 
   const query = {
       text: 'SELECT latitude,longitude,userid FROM locations WHERE userid IN ($1)',
+      values: [userid,],
+  };
+  pgPool.query(query, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200).send(result.rows);
+    }
+  });
+})
+
+
+app.get("/status",(req,res) => {
+  let userid = req.query.userid
+
+  const query = {
+      text: 'SELECT play FROM locations WHERE userid IN ($1)',
       values: [userid],
   };
   pgPool.query(query, (err, result) => {
