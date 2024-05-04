@@ -12,7 +12,8 @@ function getDb(){
       if(response[0].play){
         console.log("play");
         //play状態だったら押された時
-        window.location.href="./play.html";
+        //window.location.href="./index.html";
+        //window.location.href="./streetview.html";
       }
       else{
         console.log("not play");
