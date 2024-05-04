@@ -14,97 +14,77 @@ function initMap() {
 }
 
 // タイマーを作成
-const timeLimit = new Timemanager();
+//const timeLimit = new Timemanager();
 
-window.onload = onLoad;
+//window.onload = onLoad;
+if (window.addEventListener) {
+  window.addEventListener('load', onLoad);
+} else {
+  // もし `addEventListener` がサポートされていない場合、古いブラウザの場合に適切に動作するように代替処理を行う
+  window.attachEvent('onload', onLoad);
+}
 
 function onLoad() {
-  /*
-  // 開始ボタン作成
-  const startButton = document.createElement("button");
-  startButton.textContent = "開始処理";
-  startButton.classList.add("custom-map-control-button");
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(startButton);
-  startButton.addEventListener("click", startProcess);
-  */
-
   const startButton = document.getElementById("startButton");
-  startButton.addEventListener("click", startProcess);
+  startButton.addEventListener("click", startProcess());
 
   infoWindow = new google.maps.InfoWindow();
-
-  startProcess();
 
   console.log("map create");
 }
 
-function startProcess() {
+async function startProcess() {
+  try {
+    //すでにuuidがあるか確認
+    //await getDb();
 
-  getDb();
-/*
-  // 終了ボタン作成
-  const endButton = document.createElement("button");
-  endButton.textContent = "終了処理";
-  endButton.classList.add("custom-map-control-button");
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(endButton);
+    // 目的地の取得
+    const destination = await getGoalLocation();
 
+    // 目的地の緯度と経度をコンソールに出力
+    console.log("目的地の座標:", { lat: destination[0], lng: destination[1] });
 
-  // getDb();
+    // ユーザーの現在の位置を取得
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
 
+        console.log("現在地："+ pos);
 
-  /*
-    // 終了ボタン作成
-    const endButton = document.createElement("button");
-    endButton.textContent = "終了処理";
-    endButton.classList.add("custom-map-control-button");
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(endButton);
+        // マーカーを作成して地図上に表示
+        const marker = new google.maps.Marker({
+          position: pos,
+          map: map,
+          title: "開始地点",
+        });
 
-    // 終了ボタンがクリックされたときの処理を設定
-    endButton.addEventListener("click", endProcess);*/
+        // マーカーがクリックされたときの情報ウィンドウを設定
+        marker.addListener("click", () => {
+          infoWindow.setContent("開始地点");
+          infoWindow.open(map, marker);
+        });
 
+        // 位置情報をデータベースに保存
+        saveLocationToDatabase(pos.lat, pos.lng,destination[0],destination[1]);
 
+        // マップの中心を現在地に
+        map.setCenter(pos);
+        // マップの拡大率を変更
+        map.setZoom(15);
 
-  // ユーザーの現在の位置を取得
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-
-      console.log("現在地："+pos);
-
-      // マーカーを作成して地図上に表示
-      const marker = new google.maps.Marker({
-        position: pos,
-        map: map,
-        title: "開始地点",
-      });
-
-      // マーカーがクリックされたときの情報ウィンドウを設定
-      marker.addListener("click", () => {
-        infoWindow.setContent("開始地点");
-        infoWindow.open(map, marker);
-      });
-
-      console.log(pos.lat, pos.lng);
-
-       // 位置情報をデータベースに保存
-
-      saveLocationToDatabase(pos.lat, pos.lng);
-
-      // マップの中心を現在地に
-      map.setCenter(pos);
-      //まマップの拡大率を変更
-      map.setZoom(15);
-    },
-    () => {
-      handleLocationError(true, infoWindow, map.getCenter());
-    }
-  );
-  /*
-    // 制限時間開始
-    timeLimit.start();*/
+        
+        console.log("aaaaaa"+GetGoal());
+      },
+      () => {
+        handleLocationError(true, infoWindow, map.getCenter());
+      }
+    );
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 function endProcess() {
@@ -142,30 +122,6 @@ function endProcess() {
   timeLimit.stop();
 }
 
-function getLocation() {
-  console.log("getLocation Start");
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-
-        infoWindow.setPosition(pos);
-        infoWindow.setContent("UserPosition");
-        infoWindow.open(map);
-        map.setCenter(pos);
-      },
-      () => {
-        handleLocationError(true, infoWindow, map.getCenter());
-      }
-    );
-  } else {
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
-}
-
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setPosition(pos);
   infoWindow.setContent(
@@ -196,7 +152,7 @@ function generateUUID() {
     return v.toString(16);
   });
 }
-async function saveLocationToDatabase(latitude, longitude) {
+async function saveLocationToDatabase(latitude, longitude,lat_goal,lon_goal) {
   try {
     // ユーザーIDを取得
     var userID = getUserID();
@@ -205,9 +161,13 @@ async function saveLocationToDatabase(latitude, longitude) {
     const locationData = {
       latitude: latitude,
       longitude: longitude,
-      userid: userID
+      userid: userID,
+      play:"true",
+      lat_goal:lat_goal,
+      lon_goal:lon_goal
     };
 
+    console.log(locationData);
     // POSTリクエストを送信
     const response = await fetch('http://localhost:4000/save-location', {
       method: 'POST',
@@ -223,15 +183,44 @@ async function saveLocationToDatabase(latitude, longitude) {
   }
 }
 
-function getDb() {
+//スタート地点の座標
+function GetStart() {
   const params = {
     userid: localStorage.getItem('userID'),
   }
-  const query_params = new URLSearchParams(params);
-  fetch('http://localhost:4000/locations?' + query_params)
+  const query_params = new URLSearchParams(params); 
+
+  return fetch('http://localhost:4000/locations?' + query_params)
     .then(response => response.json())
     .then(response => {
-      console.log(response);
+      // サーバーから取得した位置情報のうち、緯度と経度のみを取得
+      const latitude = response[0].latitude; // 配列の0番目の要素から緯度を取得
+      const longitude = response[0].longitude; // 配列の0番目の要素から経度を取得
+
+      return { latitude, longitude }; // 緯度と経度の情報のみを返す
+    })
+    .catch(error => {
+      console.error('Error fetching location from database:', error);
+    });
+}
+//ゴール地点の座標
+function GetGoal() {
+  const params = {
+    userid: localStorage.getItem('userID'),
+  }
+  const query_params = new URLSearchParams(params); 
+
+  return fetch('http://localhost:4000/locations?' + query_params)
+    .then(response => response.json())
+    .then(response => {
+      // サーバーから取得した位置情報のうち、緯度と経度のみを取得
+      const latitude = response[0].lat_goal; // 配列の0番目の要素から緯度を取得
+      const longitude = response[0].lon_goal; // 配列の0番目の要素から経度を取得
+
+      return { latitude, longitude }; // 緯度と経度の情報のみを返す
+    })
+    .catch(error => {
+      console.error('Error fetching location from database:', error);
     });
 }
 
@@ -405,25 +394,6 @@ function initPano() {
   });
   */
 }
-function getLocation(callback) {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        console.log("緯度:", lat);
-        console.log("経度:", lng);
-        const destination = select_destination(lat, lng);
-        callback(destination);
-      },
-      () => {
-        console.error("Error: ユーザーの位置情報を取得できませんでした");
-      }
-    );
-  } else {
-    console.error("Error: ブラウザが位置情報サービスをサポートしていません");
-  }
-}
 
 
 function select_destination(lat_n = 0, lng_n = 0, D = 100) {
@@ -443,6 +413,7 @@ function select_destination(lat_n = 0, lng_n = 0, D = 100) {
     const destination = [r.lat2, r.lon2];
     return destination;
 }
+
 
 //上の関数を割り当ててる
 window.initPano = initPano;
