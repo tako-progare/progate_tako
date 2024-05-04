@@ -25,8 +25,8 @@ if (window.addEventListener) {
 }
 
 function onLoad() {
-  const startButton = document.getElementById("startButton");
-  startButton.addEventListener("click", startProcess());
+  //const startButton = document.getElementById("startButton");
+  //startButton.addEventListener("click", startProcess());
 
   infoWindow = new google.maps.InfoWindow();
 
@@ -39,10 +39,9 @@ async function startProcess() {
     //await getDb();
 
     // 目的地の取得
-    const destination = await getGoalLocation();
+   // const destination = await GetGoal();
 
     // 目的地の緯度と経度をコンソールに出力
-    console.log("目的地の座標:", { lat: destination[0], lng: destination[1] });
 
     // ユーザーの現在の位置を取得
     navigator.geolocation.getCurrentPosition(
@@ -66,6 +65,10 @@ async function startProcess() {
           infoWindow.setContent("開始地点");
           infoWindow.open(map, marker);
         });
+        if (GetGoal()){
+          // 目的地の取得
+        }
+        const destination=select_destination(pos.lat,pos.lng);
 
         // 位置情報をデータベースに保存
         saveLocationToDatabase(pos.lat, pos.lng,destination[0],destination[1]);
@@ -76,7 +79,7 @@ async function startProcess() {
         map.setZoom(15);
 
         
-        console.log("aaaaaa"+GetGoal());
+        console.log("aaaaaa",GetGoal());
       },
       () => {
         handleLocationError(true, infoWindow, map.getCenter());
@@ -224,9 +227,11 @@ function GetGoal() {
     });
 }
 
+
 //game start button 押された時
 function clickGameStart(){
-  window.location.href="./streetview.html";
+  startProcess();
+ //window.location.href="./streetview.html";
 }
 
 //yes button 押された時
@@ -333,68 +338,7 @@ function initPano() {
   getLocation((destination) => {
     panorama.setPosition({ lat: destination[0], lng: destination[1] });
   });
-
-  //パノラマ変更時、新しいパノラマ画像のIDをpano-cell要素内に表示する処理
-  /*
-  panorama.addListener("pano_changed", () => {
-    const panoCell = document.getElementById("pano-cell");
-
-    panoCell.innerHTML = panorama.getPano();
-  });
-  */
-
-  //リンク変更時のイベントリスナー
-  /*
-  panorama.addListener("links_changed", () => {
-    const linksTable = document.getElementById("links_table");
-
-    //linksTableの中身を一旦クリアする
-    while (linksTable.hasChildNodes()) {
-      linksTable.removeChild(linksTable.lastChild);
-    }
-
-    //新しいリンクの情報を取得し、linksTableに追加する
-    const links = panorama.getLinks();
-
-    for (const i in links) {
-      const row = document.createElement("tr");
-
-      linksTable.appendChild(row);
-
-      const labelCell = document.createElement("td");
-
-      labelCell.innerHTML = "<b>Link: " + i + "</b>";
-
-      const valueCell = document.createElement("td");
-
-      valueCell.innerHTML = links[i].description;
-      linksTable.appendChild(labelCell);
-      linksTable.appendChild(valueCell);
-    }
-  });
-  */
-
-  //位置変更時、新しい位置情報をposition-cell要素内に表示する処理
-  /*
-  panorama.addListener("position_changed", () => {
-    const positionCell = document.getElementById("position-cell");
-
-    positionCell.firstChild.nodeValue = panorama.getPosition() + "";
-  });
-  */
-
-  //POV(視点)変更時、新しいPOV情報をheading-cellとpitch-cell要素内に表示する処理
-  /*
-  panorama.addListener("pov_changed", () => {
-    const headingCell = document.getElementById("heading-cell");
-    const pitchCell = document.getElementById("pitch-cell");
-
-    headingCell.firstChild.nodeValue = panorama.getPov().heading + "";
-    pitchCell.firstChild.nodeValue = panorama.getPov().pitch + "";
-  });
-  */
 }
-
 
 function select_destination(lat_n = 0, lng_n = 0, D = 100) {
     let geod = geodesic.Geodesic.WGS84, r;
@@ -412,6 +356,29 @@ function select_destination(lat_n = 0, lng_n = 0, D = 100) {
     // 目的地の緯度，経度を配列に入れて返す
     const destination = [r.lat2, r.lon2];
     return destination;
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+
+        infoWindow.setPosition(pos);
+        infoWindow.setContent("UserPosition");
+        infoWindow.open(map);
+        map.setCenter(pos);
+      },
+      () => {
+        handleLocationError(true, infoWindow, map.getCenter());
+      }
+    );
+  } else {
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
 }
 
 
