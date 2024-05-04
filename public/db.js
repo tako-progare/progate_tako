@@ -40,13 +40,13 @@ app.get("/", function (req, res) {
 app.post('/save-location', async (req, res) => {
   try {
     // リクエストから緯度と経度を取得
-    const { latitude, longitude,userid,play } = req.body;
+    const { latitude, longitude,userid,play,lat_goal,lon_goal } = req.body;
 
     // ここで取得した位置情報をデータベースに保存する処理を実行
     // 例えば、以下のようにPostgreSQLを使用してデータベースに挿入する処理を記述することができます
     const query = {
-      text: 'INSERT INTO locations (latitude, longitude,userid,play) VALUES ($1, $2, $3, $4)',
-      values: [latitude, longitude,userid,play],
+      text: 'INSERT INTO locations (latitude, longitude,userid,play,get_goal,lon_goal) VALUES ($1, $2, $3, $4, $5, $6)',
+      values: [latitude, longitude,userid,play,lat_goal,lon_goal],
     };
 
     await pgPool.query(query);
@@ -90,7 +90,7 @@ app.get("/locations",(req,res) => {
   let userid = req.query.userid
 
   const query = {
-      text: 'SELECT latitude,longitude,userid FROM locations WHERE userid IN ($1)',
+      text: 'SELECT latitude, longitude, userid FROM locations WHERE userid = $1 ORDER BY created_at DESC LIMIT 1',
       values: [userid,],
   };
   pgPool.query(query, (err, result) => {
