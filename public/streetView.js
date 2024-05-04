@@ -84,8 +84,6 @@ function getLocation(callback) {
       (position) => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
-        console.log("緯度:", lat);
-        console.log("経度:", lng);
         const destination = select_destination(lat, lng);
         callback(destination);
       },
@@ -108,9 +106,6 @@ function select_destination(lat_n = 0, lng_n = 0, D = 100) {
 
     // 目的地の緯度，経度を計算
     r = geod.Direct(lat_n, lng_n, theta, D*d);
-    console.log("The Destination is (" + r.lat2.toFixed(8) + "," + r.lon2.toFixed(8) + ").")
-    console.log(typeof r.lat2.toFixed(8));
-    console.log(typeof r.lon2.toFixed(8));
 
     // 目的地の緯度，経度を配列に入れて返す
     const destination = [r.lat2, r.lon2];
