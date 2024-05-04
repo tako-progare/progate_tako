@@ -43,28 +43,40 @@ class Timemanager {
 
 // タイマーを作成
 const timeLimit = new Timemanager();
-/*
+*/
+
+
 window.onload = onLoad;
-/*
+
 function onLoad() {
+  /*
   // 開始ボタン作成
   const startButton = document.createElement("button");
   startButton.textContent = "開始処理";
   startButton.classList.add("custom-map-control-button");
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(startButton);
   startButton.addEventListener("click", startProcess);
-}*/
+  */
+
+  const startButton = document.getElementById("startButton");
+  startButton.addEventListener("click", startProcess);
+}
+
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -34.397, lng: 150.644 },
-    zoom: 100,
+    center: { lat: 35.3929, lng: 139.4428 },
+    zoom: 10,
   });
 
   infoWindow = new google.maps.InfoWindow();
+  console.log(map);
 }
 
 function startProcess() {
+
+  console.log(map);
+
   getDb();
 /*
   // 終了ボタン作成
@@ -84,6 +96,8 @@ function startProcess() {
         lng: position.coords.longitude,
       };
 
+      console.log(map);
+
       // マーカーを作成して地図上に表示
       const marker = new google.maps.Marker({
         position: pos,
@@ -91,14 +105,21 @@ function startProcess() {
         title: "開始地点",
       });
 
+      console.log(map);
+
       // マーカーがクリックされたときの情報ウィンドウを設定
       marker.addListener("click", () => {
         infoWindow.setContent("開始地点");
         infoWindow.open(map, marker);
       });
+
+      console.log(map);
+
       console.log(pos.lat, pos.lng);
        // 位置情報をデータベースに保存
-       saveLocationToDatabase(pos.lat, pos.lng);
+      saveLocationToDatabase(pos.lat, pos.lng);
+
+      console.log(map);
 
       map.setCenter(pos);
     },
@@ -203,7 +224,7 @@ async function saveLocationToDatabase(latitude, longitude) {
   try {
     // ユーザーIDを取得
     var userID = getUserID();
-    
+
     // 位置情報とユーザーIDを含むオブジェクトを作成
     const locationData = {
         latitude: latitude,
@@ -234,7 +255,7 @@ function getDb(){
     userid: localStorage.getItem('userID'),
     play: localStorage.getItem('play')
   }
-  const query_params = new URLSearchParams(params); 
+  const query_params = new URLSearchParams(params);
   fetch('http://localhost:4000/locations?' + query_params)
     .then(response => response.json())
     .then(response => {

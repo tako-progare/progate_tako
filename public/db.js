@@ -82,16 +82,15 @@ app.post("/create", function (req, res) {
     }
   });
 });
-//Expressアプリケーションをポート3000でリッスンし、起動メッセージを表示
-app.listen(4000, () => console.log("Example app listening on port 5000!"));
+//Expressアプリケーションをポート4000でリッスンし、起動メッセージを表示
+app.listen(4000, () => console.log("Example app listening on port 4000!"));
 
 
 app.get("/locations",(req,res) => {
   let userid = req.query.userid
-  let playUser = req.query.playUser
-  
+
   const query = {
-      text: 'SELECT latitude,longitude,userid,play FROM locations WHERE userid = $1 AND play = $2',
+      text: 'SELECT latitude,longitude,userid,play FROM locations WHERE userid IN ($1)',
       values: [userid, playUser],
   };
   pgPool.query(query, (err, result) => {
