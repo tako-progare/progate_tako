@@ -1,8 +1,8 @@
-import { select_destination } from 'select_destination.js';
-import { saveLocationToDatabase } from 'SaveLocation.js';
-import { handleLocationError } from 'handleLocationError.js';
+import { select_destination } from './select_destination.js';
+import { saveLocationToDatabase } from './SaveLocation.js';
+import { handleLocationError } from './handleLocationError.js';
 
-export async function startProcess() {
+export async function startProcess(map) {
     try {
       //すでにuuidがあるか確認
       //await getDb();
@@ -20,7 +20,7 @@ export async function startProcess() {
             lng: position.coords.longitude,
           };
   
-          console.log("現在地："+ pos);
+          console.log("現在地：", pos);
   
           // マーカーを作成して地図上に表示
           /*const marker = new google.maps.Marker({
@@ -46,9 +46,6 @@ export async function startProcess() {
           map.setCenter(pos);
           // マップの拡大率を変更
           map.setZoom(15);
-  
-          
-          console.log("aaaaaa",GetGoal());
         },
         () => {
           handleLocationError(true, infoWindow, map.getCenter());

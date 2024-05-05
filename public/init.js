@@ -1,5 +1,5 @@
 //window.addEventListener('load', getDb);
-
+/*
 function getDb(){
   const params = {
     userid: localStorage.getItem('userID'),
@@ -21,7 +21,7 @@ function getDb(){
         window.location.href="./index.html";
       }
     });
-}
+}*/
 
 function getUserID() {
   // ローカルストレージからuserIDを取得

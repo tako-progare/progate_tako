@@ -7,7 +7,6 @@
         </script>
 
         <link rel="stylesheet" type="text/css" href="./style.css" />
-        <script type="module" src="./index.js"></script>
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
       </head>
@@ -16,8 +15,8 @@
         <div id="pano" class="css-map"></div>
         <h3 class="h3-title">Are you ready?</h2>
         <div class="yesno">
-            <button class="no" ontouchstart="" onclick="clickNo()">no</button>
-            <button class="yes" ontouchstart="" onclick="clickYes()">yes</button>
+            <button class="no" id="playno"ontouchstart="">no</button>
+            <button class="yes" id="playok" ontouchstart="">yes</button>
         </div>
 
 
@@ -29,7 +28,6 @@
         defer></script>
 
         <script src="./streetview.js" type="module"></script>
-        <script src="./js/GetGoal.js" type="module"></script>
 
 </body>
 
