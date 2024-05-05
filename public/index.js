@@ -157,14 +157,14 @@ class Timemanager {
             lng: position.coords.longitude,
           };
           
+          
           // マーカーを作成して地図上に表示
           const marker = new google.maps.Marker({
             position: pos,
             map: map
           });
+          marker.setMap(map);
 
-          
-    
           // マーカーがクリックされたときの情報ウィンドウを設定
           marker.addListener("click", () => {
             infoWindow.setContent("現在地");

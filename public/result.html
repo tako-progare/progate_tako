@@ -8,17 +8,28 @@
     </script>
 
     <link rel="stylesheet" type="text/css" href="./style.css" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
 </head>
 
 <body>
     <h1 class="h1-title">Result</h1>
     <div id="map" class="css-map"></div>
-    <p class="result-mètre">123m</p>
+    <p class="result-mètre" id="result-meter">123m</p>
     <div class="line"></div>
-    <p class="result-score">4950</p>
+    <p class="result-score" id="result-score">4950</p>
+
+
+
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1sbtY7bImjs85QQsleAGz5UmBYNdPb28&callback=onLoadResult&v=weekly"
+    defer></script>
+    <script src="./js/result.js"></script>
+
+
+
+
+
 </body>
-<script src="result.js"></script>
 
 </html>
