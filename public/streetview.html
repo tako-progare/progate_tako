@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <title>Geolocation</title>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        <script type="text/javascript" src="https://geographiclib.sourceforge.io/scripts/geographiclib-geodesic.min.js">
+        </script>
+
+        <link rel="stylesheet" type="text/css" href="./style.css" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      </head>
+      <body>
+        <h1 class="h1-title">Goal Point</h1>
+        <div id="pano" class="css-map"></div>
+        <h3 class="h3-title">Are you ready?</h2>
+        <div class="yesno">
+            <button class="no" id="playno"ontouchstart="">no</button>
+            <button class="yes" id="playok" ontouchstart="">yes</button>
+        </div>
+
+
+      <!--<script src="./index.js"></script>-->
+
+
+      <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1sbtY7bImjs85QQsleAGz5UmBYNdPb28&callback=initMap&v=weekly"
+        defer></script>
+
+        <script src="./streetview.js" type="module"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,307 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Bakbak+One&family=Yusei+Magic&display=swap');
+
+/* Optional: Makes the sample page fill the window. */
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #EBEDF0;
+}
+
+main {
+  width: 100vw;
+  height: 100vh;
+  width: 393px;
+  height: 852px;
+  padding: 0;
+  margin: 0 auto;
+  background: #EBEDF0;
+  position: relative;
+}
+
+.h1-title {
+  display: flex;
+  width: 320px;
+  height: 65px;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--blueblack, #051F2B);
+  font-family: "Bakbak One";
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+
+  /* 61.111% */
+}
+
+.h2-title {
+  width: 320px;
+  height: auto;
+  padding: 0;
+  margin: 0 auto;
+  font-size: 22px;
+  position: absolute;
+  top: 83%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+.button-main {
+  display: flex;
+  width: 320px;
+  height: 80px;
+  padding: 22px 68px 23px 68px;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 80px;
+  background: var(--white, #FFF);
+  box-shadow: 0px 4px 8px 0px rgba(68, 68, 68, 0.25);
+  color: var(--blueblack, #051F2B);
+  text-align: center;
+  font-family: "Bakbak One";
+  font-size: 24px;
+  font-style: bold;
+  font-weight: 400;
+  line-height: 22px;
+  transition: all 1s 0s ease-in-out;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-90%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  /* 91.667% */
+}
+
+.button-main:hover {
+  border-radius: 40px;
+  background: #73A3BB;
+  letter-spacing: 0.15em;
+  border-radius: 100px;
+  transition: all 1s 0s ease-in-out;
+  box-shadow: 0px 4px 8px 0px rgba(68, 68, 68, 0.25);
+  color: white;
+}
+
+.button-main:active {
+  border-radius: 40px;
+  background: var(--blueblack, #051F2B);
+  box-shadow: 0px 4px 8px 0px rgba(68, 68, 68, 0.25);
+}
+
+#map {
+  background-color: aqua;
+  width: 320px;
+  height: 500px;
+  padding: 0;
+  margin: auto;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  flex-shrink: 0;
+  border-radius: 16px;
+  box-shadow: 0px 4px 8px 0px rgba(68, 68, 68, 0.25);
+}
+
+.custom-map-control-button {
+  background-color: #fff;
+  border: 0;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+  margin: 10px;
+  padding: 0 0.5em;
+  font: 400 18px Roboto, Arial, sans-serif;
+  overflow: hidden;
+  height: 40px;
+  cursor: pointer;
+}
+
+.custom-map-control-button:hover {
+  background: rgb(235, 235, 235);
+}
+
+.hidden {
+  display: none;
+}
+
+/* street view表示できるようにするやつ */
+#floating-panel {
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: "Roboto", "sans-serif";
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+#pano {
+  height: 500px;
+}
+
+#floating-panel {
+  width: 45%;
+  height: 100%;
+  float: right;
+  text-align: left;
+  overflow: auto;
+  position: static;
+  border: 0px solid #999;
+}
+
+/* index.html */
+
+/* streetview.html */
+.h3-title {
+  display: flex;
+  width: 100vw;
+  max-width: 393px;
+  height: 72px;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  background: #FFF;
+  box-shadow: 0px 4px 8px 0px rgba(68, 68, 68, 0.25);
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translate(-80%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+.yesno {
+  width: 200px;
+  height: 72px;
+
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-80%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+
+}
+
+.no {
+  width: 72px;
+  border-radius: 36px;
+  background: linear-gradient(135deg, #00798C 0%, #051F2B 100%);
+  box-shadow: 0px 4px 8px 0px rgba(68, 68, 68, 0.25);
+  border: none;
+  color: white;
+  transition: all 1s 0s ease-in-out;
+}
+
+.no:hover {
+  background: linear-gradient(90deg, #00798C 0%, #051F2B 100%);
+  letter-spacing: 0.18em;
+}
+
+.no:active {
+  background: linear-gradient(-45deg, #00798C 0%, #051F2B 100%);
+}
+
+
+
+.yes {
+  width: 72px;
+  border-radius: 36px;
+  background: linear-gradient(135deg, #FDB43E 0%, #D1495B 100%);
+  box-shadow: 0px 4px 8px 0px rgba(68, 68, 68, 0.25);
+  border: none;
+  color: white;
+  transition: all 1s 0s ease-in-out;
+}
+
+.yes:hover {
+  background: linear-gradient(90deg, #FDB43E 0%, #D1495B 100%);
+  letter-spacing: 0.18em;
+}
+
+.result-score {
+  display: flex;
+  width: 179px;
+  height: 73px;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #000;
+  text-align: center;
+  font-family: "Bakbak One";
+  font-size: 54px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+
+  /* 40.741% */
+}
+
+.line {
+  width: 352px;
+  height: 1px;
+  background: #000;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+
+}
+
+.result-mètre {
+  display: flex;
+  width: 108px;
+  height: 31px;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #000;
+  text-align: center;
+  font-family: "Bakbak One";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px;
+  /* 122.222% */
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+
+}
