@@ -5,21 +5,24 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script type="text/javascript" src="https://geographiclib.sourceforge.io/scripts/geographiclib-geodesic.min.js">
     </script>
-  
+
     <link rel="stylesheet" type="text/css" href="./style.css" />
     <script type="module" src="./index.js"></script>
-  
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
     <main>
         <h1 class="h1-title">Play Game</h1>
-        <div class="css-map"></div>
+        <div id="map" class="css-map"></div>
         <button class="button-main" onclick="clickGuess()">GUESS!!</button>
 
     </main>
 
     <script src="./index.js"></script>
-    
+
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1sbtY7bImjs85QQsleAGz5UmBYNdPb28&callback=initMap&v=weekly"
+    defer></script>
 </body>
 </html>
