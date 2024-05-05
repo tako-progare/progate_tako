@@ -1,4 +1,3 @@
-
 let map, infoWindow;
 let pos; // pos変数を定義
 let destinationRange = 100;
@@ -14,7 +13,7 @@ async function onLoadResult() {
         streetViewControl: false,
     });
 
-    const start = await GetStart();
+    const destinationPoint = await GetGoal();
 
     //現在地取得
     navigator.geolocation.getCurrentPosition(
@@ -23,7 +22,7 @@ async function onLoadResult() {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
             };
-            console.log("golaPoint",goalPoint);
+            console.log("goalPoint",goalPoint);
 
             // marker 設置
             createMarker(goalPoint);
@@ -37,19 +36,19 @@ async function onLoadResult() {
             };*/
 
             //スタート地点を設定
-            const startPoint = {
-                lat: start.latitude,
-                lng: start.longitude,
+            const destination = {
+                lat: destinationPoint.latitude,
+                lng: destinationPoint.longitude,
             }
 
             // marker 設置
-            createMarker(startPoint);
+            createMarker(destination);
 
             // 現在地とゴール地点の間に線を引く
-            var line = new google.maps.Polyline({ path: [goalPoint, startPoint], map: map });
+            var line = new google.maps.Polyline({ path: [goalPoint, destination], map: map });
 
             // 距離計算
-            var result = calc_score(startPoint.lat, startPoint.lng, goalPoint.lat, goalPoint.lng);
+            var result = calc_score(destination.lat, destination.lng, goalPoint.lat, goalPoint.lng);
             console.log("result:",result);
 
             var resultMeter=document.getElementById("result-meter");
@@ -92,28 +91,26 @@ function haversine_distance(mk1, mk2) {
     return distance;
 }
 
-function GetStart() {
+//ゴール地点の座標
+function GetGoal() {
     const params = {
       userid: localStorage.getItem('userID'),
     }
     const query_params = new URLSearchParams(params);
 
-    return fetch('https://progate-tako-1.onrender.com/locations?' + query_params)
+    return fetch('https://progate-tako-1.onrender.com/goal_location?' + query_params)
       .then(response => response.json())
       .then(response => {
-        console.log("response:",response);
         // サーバーから取得した位置情報のうち、緯度と経度のみを取得
-        const latitude = response[0].latitude; // 配列の0番目の要素から緯度を取得
-        const longitude = response[0].longitude; // 配列の0番目の要素から経度を取得
-
-        console.log("response:",latitude);
+        const latitude = response[0].lat_goal; // 配列の0番目の要素から緯度を取得
+        const longitude = response[0].lon_goal; // 配列の0番目の要素から経度を取得
 
         return { latitude, longitude }; // 緯度と経度の情報のみを返す
       })
       .catch(error => {
         console.error('Error fetching location from database:', error);
       });
-}
+  }
 
 function calc_score(lat_start, lng_start, lat_goal, lng_goal){
   let geod = geodesic.Geodesic.WGS84, r;
