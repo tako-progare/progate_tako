@@ -24,6 +24,16 @@ async function initPano() {
   }
 }
 
+//yes button 押された時
+window.clickYes = () => {
+  window.location.href="./play.html";
+}
+
+//no button 押された時
+window.clickNo = () => {
+  window.location.href="./index.html";
+}
+
 //上の関数を割り当ててる
 window.initPano = initPano;
 window.addEventListener('load', initPano);
