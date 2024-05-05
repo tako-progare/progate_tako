@@ -72,6 +72,7 @@ function onLoad() {
   startProcess();
 }
 
+<<<<<<< Updated upstream
 
 
 
@@ -251,6 +252,8 @@ function GetGoal() {
 >>>>>>> 13d2e660914af5c2c31dee468f863bf4a7900351
 
 
+=======
+>>>>>>> Stashed changes
 //game start button 押された時
 function clickGameStart(){
   GetStart();
