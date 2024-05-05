@@ -157,15 +157,12 @@ class Timemanager {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          hideMarkers();
-          markers = [];
           
           // マーカーを作成して地図上に表示
           const marker = new google.maps.Marker({
             position: pos,
             map: map
           });
-          markers.push(marker);
 
           
     
