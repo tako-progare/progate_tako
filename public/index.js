@@ -68,13 +68,12 @@ function onLoad() {
   infoWindow = new google.maps.InfoWindow();
 
   console.log("map create");
-
-  startProcess(map);
 }
 
 //game start button 押された時
 window.clickGameStart = () => {
   GetStart();
+  startProcess(map);
   window.location.href="./streetview.html";
 }
 
