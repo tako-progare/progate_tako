@@ -1,4 +1,4 @@
-import { handleLocationError } from 'handleLocationError.js';
+import { handleLocationError } from './handleLocationError.js';
 
 export function getLocation() {
     if (navigator.geolocation) {
@@ -8,11 +8,11 @@ export function getLocation() {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-  
-          infoWindow.setPosition(pos);
+
+          //infoWindow.setPosition(pos);
           //infoWindow.setContent("UserPosition");
-          infoWindow.open(map);
-          map.setCenter(pos);
+          //infoWindow.open(map);
+          //map.setCenter(pos);
         },
         () => {
           handleLocationError(true, infoWindow, map.getCenter());
