@@ -5,7 +5,7 @@ export function GetStart() {
     }
     const query_params = new URLSearchParams(params); 
   
-    return fetch('http://localhost:4000/locations?' + query_params)
+    return fetch('https://progate-tako-1.onrender.com/locations?' + query_params)
       .then(response => response.json())
       .then(response => {
         // サーバーから取得した位置情報のうち、緯度と経度のみを取得

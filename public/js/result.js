@@ -98,7 +98,7 @@ function GetStart() {
     }
     const query_params = new URLSearchParams(params);
 
-    return fetch('http://localhost:4000/locations?' + query_params)
+    return fetch('https://progate-tako-1.onrender.com/locations?' + query_params)
       .then(response => response.json())
       .then(response => {
         console.log("response:",response);

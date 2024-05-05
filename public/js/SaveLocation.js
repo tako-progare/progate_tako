@@ -15,7 +15,7 @@ export async function saveLocationToDatabase(latitude, longitude,lat_goal,lon_go
   
       console.log(locationData);
       // POSTリクエストを送信
-      const response = await fetch('http://localhost:4000/save-location', {
+      const response = await fetch('https://progate-tako-1.onrender.com/save-location', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
