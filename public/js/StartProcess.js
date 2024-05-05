@@ -1,8 +1,9 @@
 import { select_destination } from './select_destination.js';
 import { saveLocationToDatabase } from './SaveLocation.js';
 import { handleLocationError } from './handleLocationError.js';
+import { GetGoal } from './GetGoal.js';
 
-export async function startProcess() {
+export async function startProcess(map) {
     try {
       //すでにuuidがあるか確認
       //await getDb();

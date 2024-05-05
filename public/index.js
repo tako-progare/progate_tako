@@ -69,7 +69,7 @@ function onLoad() {
 
   console.log("map create");
 
-  startProcess();
+  startProcess(map);
 }
 
 //game start button 押された時
