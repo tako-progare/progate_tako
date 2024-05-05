@@ -100,7 +100,7 @@ function onLoad() {
         // マップの拡大率を変更
         map.setZoom(15);
 
-        
+
         console.log("aaaaaa",GetGoal());
       },
       () => {
