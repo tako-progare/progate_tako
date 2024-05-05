@@ -1,10 +1,10 @@
-import { getLocation } from '/js/getLocation.js';
-import { select_destination } from '/js/select_destination.js';
-import { endProcess } from '/js/EndProcess.js';
-import { startProcess } from '/js/startProcess.js';
-import { saveLocationToDatabase } from '/js/SaveLocation.js';
-import { GetGoal } from '/js/GetGoal.js';
-import { GetStart } from '/js/GetStart.js';
+import { getLocation } from './js/getLocation.js';
+import { select_destination } from './js/select_destination.js';
+import { endProcess } from './js/EndProcess.js';
+import { startProcess } from './js/startProcess.js';
+import { saveLocationToDatabase } from './js/SaveLocation.js';
+import { GetGoal } from './js/GetGoal.js';
+import { GetStart } from './js/GetStart.js';
 let map, infoWindow;
 
 let destinationRange = 100;
@@ -78,9 +78,7 @@ function onLoad() {
 
 
 
-<<<<<<< HEAD
 
-=======
         // マーカーがクリックされたときの情報ウィンドウを設定
         marker.addListener("click", () => {
           infoWindow.setContent("開始地点");
@@ -248,7 +246,7 @@ function GetGoal() {
       console.error('Error fetching location from database:', error);
     });
 }
->>>>>>> 13d2e660914af5c2c31dee468f863bf4a7900351
+
 
 
 //game start button 押された時
