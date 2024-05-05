@@ -62,7 +62,6 @@ if (window.addEventListener) {
 }
 
 function onLoad() {
-  console.log("map create");
   const startButton = document.getElementById("startButton");
   startButton.addEventListener("click", Start);
   infoWindow = new google.maps.InfoWindow();
