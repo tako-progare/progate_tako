@@ -39,7 +39,7 @@ async function startProcess() {
     //await getDb();
 
     // 目的地の取得
-    const destination = await getGoalLocation();
+    const destination = await GetGoal();
 
     // 目的地の緯度と経度をコンソールに出力
     console.log("目的地の座標:", { lat: destination[0], lng: destination[1] });
@@ -333,6 +333,29 @@ function initPano() {
   getLocation((destination) => {
     panorama.setPosition({ lat: destination[0], lng: destination[1] });
   });
+  
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+  
+          infoWindow.setPosition(pos);
+          infoWindow.setContent("UserPosition");
+          infoWindow.open(map);
+          map.setCenter(pos);
+        },
+        () => {
+          handleLocationError(true, infoWindow, map.getCenter());
+        }
+      );
+    } else {
+      handleLocationError(false, infoWindow, map.getCenter());
+    }
+  }
 
   //パノラマ変更時、新しいパノラマ画像のIDをpano-cell要素内に表示する処理
   /*
