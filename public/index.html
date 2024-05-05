@@ -29,54 +29,15 @@
       <input class="input-range" type="range">
     </form> -->
 
-    <button class="button-main" id="startButton" ontouchstart="" onclick="clickGameStart()">Game Start</button>
+    <button class="button-main" id="startButton" ontouchstart="" onclick="clickGameStart ()">Game Start</button>
 
 
   </main>
 
-  <!-- <div id="pano"></div>
-  <div id="floating-panel">
-    <table>
-      <tr>
-        <td><b>Position</b></td>
-        <td id="position-cell">&nbsp;</td>
-      </tr>
-      <tr>
-        <td><b>POV Heading</b></td>
-        <td id="heading-cell">270</td>
-      </tr>
-      <tr>
-        <td><b>POV Pitch</b></td>
-        <td id="pitch-cell">0.0</td>
-      </tr>
-      <tr>
-        <td><b>Pano ID</b></td>
-        <td id="pano-cell">&nbsp;</td>
-      </tr>
-      <table id="links_table"></table>
-    </table>
-  </div> -->
-
-  <!--
-      The `defer` attribute causes the callback to execute after the full HTML
-      document has been parsed. For non-blocking uses, avoiding race conditions,
-      and consistent behavior across browsers, consider loading using Promises.
-      See https://developers.google.com/maps/documentation/javascript/load-maps-js-api
-      for more information.
-  -->
-  <!--
-    <script>
-      document.getElementById('startButton').addEventListener('click', function() {
-        startProcess();
-      });
-    </script>
-  -->
-
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1sbtY7bImjs85QQsleAGz5UmBYNdPb28&callback=initMap&v=weekly"
     defer></script>
-  <script type="module" src="index.js"></script>
-  <!--<script src="streetView.js"></script>-->
+  <script src="index.js" type="module"></script>
 </body>
 
 </html>
